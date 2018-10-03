@@ -3,7 +3,7 @@
 # 10/17/16
 
 ############################
-basedirectory <- "/Users/alecnelson/Documents/Clemson_Files/MastersThesis/DataAnalysis"
+basedirectory <- "C:\\Users\\ahn11803\\Documents\\GitHub\\Spatial-R_Code"
 inputdata_path <- "D:/DataAnalysis/TestData"
 countryshape_path <- "D:/DataAnalysis/App_Boundary_SHP"
 #outputdata_path <- "D:/DataAnalysis/TestResults5"
@@ -11,8 +11,9 @@ countryshape_path <- "D:/DataAnalysis/App_Boundary_SHP"
 sampledata_path<-"D:/DataAnalysis/TestSample"
 SampledCSV_path<-"D:/DataAnalysis/SampledClimateData"
 EnvirData_path<-"D:/DataAnalysis/EnvironmentData"
-CombinIter_NoSeas_path<-"/Users/alecnelson/Documents/Clemson_Files/MastersThesis/DataAnalysis/MultiVarLimit_Iter_NO_SAdj"
-CombinIter_SeasAdj_path<-"/Users/alecnelson/Documents/Clemson_Files/MastersThesis/DataAnalysis/MultiVarLimit_Iter_SeasonAdj"
+CombinIter_NoSeas_path<-"D:\\DataAnalysis\\MultiVarLimit_Iter_NO_SAdj"
+CombinIter_SeasAdj_path<-"D:\\DataAnalysis\\MultiVarLimit_Iter_SeasonAdj"
+DataAnalysis_path<- "D:/DataAnalysis"
 
 setwd(inputdata_path)
 
@@ -346,7 +347,7 @@ write.csv(newdata,file="D:/DataAnalysis/SampleStack_ClimateTotal.csv",row.names=
 
 ################################################################################################################
 ################################################################################################################
-setwd(basedirectory)
+setwd(DataAnalysis_path)
 SampleTotal<-read.csv("SampleStack_ClimateTotal.csv")
 str(SampleTotal)
 summary(SampleTotal)
@@ -1090,7 +1091,7 @@ str(mqcc.samples)
 summary(mqcc.samples)
 
 
-setwd(basedirectory)
+#setwd(basedirectory)
 MQCC_SampleTotal<-read.csv("Topo_MQCC_Focal_SampleTotal_SeasonAdj.csv")
 NED.samples<-MQCC_SampleTotal[,-10]
 
@@ -1153,7 +1154,7 @@ for(i in 1:length(csv_file_list)){
 summary(Model.compare.AIC)
 
 #write.csv(Model.compare.AIC,file="D:/DataAnalysis/Model.compare.AIC_SeasonAdj.csv",row.names=FALSE)
-Model.compare.AIC<-read.csv("/Users/alecnelson/Documents/Clemson_Files/MastersThesis/DataAnalysis/Model.compare.AIC_SeasonAdj.csv")
+Model.compare.AIC<-read.csv("D:/DataAnalysis/Model.compare.AIC_SeasonAdj.csv")
 
 barplot(Model.compare.AIC[order(Model.compare.AIC$Model3.AIC), ]$Model3.AIC)
 
@@ -1192,6 +1193,8 @@ vars.result<-vars.total.all[col.nums.unique]
 Vars.result_NoSeas_170<-c("tasmax_Mean","tasmax_Max","tasmax_Min","tasmin_Mean","huss_Max","huss_Min","pr_Mean","pr_Max","rsds_Mean","rsds_Max","rsds_Min")
 #Vars.result_SeasAdj_405<-c("tasmax_Max","tasmax_Min","tasmin_Min","tasmin_Mean","tasmin_Max","huss_Mean","huss_Min","pr_Mean","pr_Max","rsds_Max","rsds_Min")
 Vars.result_NoSeas_218<-c("tasmax_Mean","tasmax_Max","tasmax_Min","tasmin_Max","huss_Mean","huss_Max","huss_Min","pr_Mean","pr_Max","rsds_Max","rsds_Min")
+
+#Final Model
 Vars.result_NoSeas_420<-c("tasmax_Max","tasmax_Min","tasmin_Mean","tasmin_Max","huss_Mean","huss_Max","huss_Min","pr_Mean","pr_Max","rsds_Max","rsds_Min")
 
 Vars.result_NoSeas_Final<-c("tasmax_Max","tasmax_Min","tasmin_Mean","tasmin_Max","huss_Mean","huss_Max","huss_Min","pr_Max","rsds_Mean","rsds_Max","rsds_Min")
@@ -1202,9 +1205,9 @@ index.nums<-which(vars.total.all %in% Vars.result_NoSeas_218)
 index.nums<-which(vars.total.all %in% Vars.result_NoSeas_Final)
 
 index.coll<-paste(index.nums,collapse="~")
-filename.f<-paste0("/Users/alecnelson/Documents/Clemson_Files/MastersThesis/DataAnalysis/MultiVarLimit_Iter_SeasonAdj/MQCC_Limits_",index.coll,".csv")
+filename.f<-paste0("D:/DataAnalysis/MultiVarLimit_Iter_SeasonAdj/MQCC_Limits_",index.coll,".csv")
 
-filename.f<-paste0("/Users/alecnelson/Documents/Clemson_Files/MastersThesis/DataAnalysis/MultiVarLimit_Iter_SeasonAdj/MQCC_Limits_",index.coll,".csv")
+filename.f<-paste0("D:/DataAnalysis/MultiVarLimit_Iter_SeasonAdj/MQCC_Limits_",index.coll,".csv")
 
 
 mqcc.samples<-read.csv(filename.f)
@@ -1219,11 +1222,10 @@ Model.corAR1.2<-gls(multivarvlimits ~ NEDextract + Slopeextract + Aspectextract 
                     data = MQCC_SampleTotal.merge,method="REML")
 Model.corLIN.3<-gls(multivarvlimits ~ NEDextract + Slopeextract + Aspectextract + TPIextract, correlation=corLin(form=~ x1 + x2),
                     data = MQCC_SampleTotal.merge,method="REML",verbose = TRUE)
-# Model.corLIN.GLs<-Gls(multivarvlimits ~ NEDextract + Slopeextract + Aspectextract + TPIextract, correlation=corLin(form=~ x1 + x2),
-#                     data = MQCC_SampleTotal.merge,method="REML")
+Model.corLIN.GLs<-Gls(multivarvlimits ~ NEDextract + Slopeextract + Aspectextract + TPIextract, correlation=corLin(form=~ x1 + x2),data = MQCC_SampleTotal.merge,method="REML")
 summary(Model.corAR1.2)
 summary(Model.corLIN.3)
-# summary(Model.corLIN.GLs)
+summary(Model.corLIN.GLs)
 
 1-(0.4994/0.7251)
 
